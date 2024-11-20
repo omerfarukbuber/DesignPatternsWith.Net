@@ -1,4 +1,5 @@
 ﻿using Carter;
+using DesignPatterns.Strategy.Shared;
 using DesignPatterns.Strategy.Shared.Results;
 
 namespace DesignPatterns.Strategy.Features.Products;
@@ -27,11 +28,4 @@ public class ProductsModule() : CarterModule("api/products")
             return Results.Ok(strategyDesignPatternType);
         });
     }
-}
-
-public enum StrategyDesignPatternType
-{
-    SqlServer = 0,
-    Postgres = 1,
-    MongoDb = 2
 }
