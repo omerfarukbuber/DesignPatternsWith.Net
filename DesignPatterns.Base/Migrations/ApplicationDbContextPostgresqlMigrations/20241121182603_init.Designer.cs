@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DesignPatterns.Base.Migrations.ApplicationDbContextPostgresqlMigrations
 {
     [DbContext(typeof(ApplicationDbContextPostgresql))]
-    [Migration("20241120153219_init")]
+    [Migration("20241121182603_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -26,11 +26,8 @@ namespace DesignPatterns.Base.Migrations.ApplicationDbContextPostgresqlMigration
 
             modelBuilder.Entity("DesignPatterns.Base.Features.Products.Product", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
