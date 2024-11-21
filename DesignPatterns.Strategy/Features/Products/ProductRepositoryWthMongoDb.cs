@@ -31,7 +31,7 @@ public class ProductRepositoryWthMongoDb : IProductRepository
         return Result.Success(products);
     }
 
-    public async Task<Result<Product>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Result<Product>> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var product =
             await (await _productsCollection.FindAsync(p => p.Id == id, cancellationToken: cancellationToken))
@@ -69,7 +69,7 @@ public class ProductRepositoryWthMongoDb : IProductRepository
         return Result.Success();
     }
 
-    public async Task<Result> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Result> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         await _productsCollection.DeleteOneAsync(p => p.Id == id, cancellationToken);
         return Result.Success();

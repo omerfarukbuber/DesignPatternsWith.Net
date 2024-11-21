@@ -22,7 +22,7 @@ public class ProductRepositoryWithSqlServer(ApplicationDbContextSqlServer contex
         return Result.Success(products);
     }
 
-    public async Task<Result<Product>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Result<Product>> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var product = await _dbSet.FindAsync(id);
         return product == null
@@ -34,6 +34,7 @@ public class ProductRepositoryWithSqlServer(ApplicationDbContextSqlServer contex
     {
         var product = new Product
         {
+            Id = Guid.NewGuid().ToString(),
             Name = createProduct.Name,
             Description = createProduct.Description,
             Price = createProduct.Price
@@ -65,7 +66,7 @@ public class ProductRepositoryWithSqlServer(ApplicationDbContextSqlServer contex
         return Result.Success();
     }
 
-    public async Task<Result> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Result> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         var getResult = await GetByIdAsync(id, cancellationToken);
         if (getResult.IsFailure)
