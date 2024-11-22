@@ -6,12 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DesignPatterns.Observer.Features.Products.CQRS;
 
-internal sealed class ProductUpdateCommandHandler(ApplicationDbContextSqlServer context, IProductPriceChangeSubject priceChangeSubject)
+internal sealed class ProductUpdateCommandHandler(
+    ApplicationDbContextSqlServer context,
+    //IProductPriceChangeSubject priceChangeSubject,
+    IMediator mediator)
     : IRequestHandler<ProductUpdateCommand, Result>
 {
     private readonly ApplicationDbContextSqlServer _context = context;
     private readonly DbSet<Product> _productDbSet = context.Set<Product>();
-    private readonly IProductPriceChangeSubject _priceChangeSubject = priceChangeSubject;
+    //private readonly IProductPriceChangeSubject _priceChangeSubject = priceChangeSubject;
+    private readonly IMediator _mediator = mediator;
 
 
     public async Task<Result> Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
@@ -34,7 +38,11 @@ internal sealed class ProductUpdateCommandHandler(ApplicationDbContextSqlServer 
 
         if (isPriceChanged)
         {
-            _priceChangeSubject.NotifyObservers(product);
+            await _mediator.Publish(new ProductPriceChangedEvent
+            {
+                Product = product
+            }, cancellationToken);
+            //_priceChangeSubject.NotifyObservers(product);
         }
 
         return Result.Success();

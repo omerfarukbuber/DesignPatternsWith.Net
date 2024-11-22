@@ -11,19 +11,19 @@ builder.Services.AddCarter();
 builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(FeaturesAssembly).Assembly));
 
-builder.Services.AddSingleton<IProductPriceChangeSubject>(sp =>
-{
-    var productPriceChangeSubject = new ProductPriceChangeSubject();
+//builder.Services.AddSingleton<IProductPriceChangeSubject>(sp =>
+//{
+//    var productPriceChangeSubject = new ProductPriceChangeSubject();
 
-    productPriceChangeSubject.RegisterObserver(
-        new ProductPriceChangeObserverUpdateBasket(sp
-            .GetRequiredService<ILogger<ProductPriceChangeObserverUpdateBasket>>()));
-    productPriceChangeSubject.RegisterObserver(
-        new ProductPriceChangeObserverSendNotificationToUser(sp
-            .GetRequiredService<ILogger<ProductPriceChangeObserverSendNotificationToUser>>()));
+//    productPriceChangeSubject.RegisterObserver(
+//        new ProductPriceChangeObserverUpdateBasket(sp
+//            .GetRequiredService<ILogger<ProductPriceChangeObserverUpdateBasket>>()));
+//    productPriceChangeSubject.RegisterObserver(
+//        new ProductPriceChangeObserverSendNotificationToUser(sp
+//            .GetRequiredService<ILogger<ProductPriceChangeObserverSendNotificationToUser>>()));
 
-    return productPriceChangeSubject;
-});
+//    return productPriceChangeSubject;
+//});
 
 builder.Services.AddDbContext<ApplicationDbContextSqlServer>(options =>
 {
