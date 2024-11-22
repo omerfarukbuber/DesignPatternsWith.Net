@@ -1,10 +1,29 @@
 using Carter;
 using DesignPatterns.Observer.Database;
+using DesignPatterns.Observer.Features;
+using DesignPatterns.Observer.Features.Products.Observers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter();
+
+builder.Services.AddMediatR(configuration =>
+    configuration.RegisterServicesFromAssembly(typeof(FeaturesAssembly).Assembly));
+
+builder.Services.AddSingleton<IProductPriceChangeSubject>(sp =>
+{
+    var productPriceChangeSubject = new ProductPriceChangeSubject();
+
+    productPriceChangeSubject.RegisterObserver(
+        new ProductPriceChangeObserverUpdateBasket(sp
+            .GetRequiredService<ILogger<ProductPriceChangeObserverUpdateBasket>>()));
+    productPriceChangeSubject.RegisterObserver(
+        new ProductPriceChangeObserverSendNotificationToUser(sp
+            .GetRequiredService<ILogger<ProductPriceChangeObserverSendNotificationToUser>>()));
+
+    return productPriceChangeSubject;
+});
 
 builder.Services.AddDbContext<ApplicationDbContextSqlServer>(options =>
 {
@@ -29,5 +48,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapCarter();
 
 app.Run();
